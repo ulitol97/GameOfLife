@@ -1,15 +1,14 @@
+/* General */
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 #main {
@@ -19,11 +18,38 @@ code {
   margin: auto;
 }
 
+/* Top controls */
+
 .controls {
+  display: flex;
+  justify-content: flex-start;
   margin-top: 5px;
-  padding: 10px 0;
+  padding-top: 10px;
+}
+
+.controls .form-group {
+  margin: 0 20px auto 0;
 }
 
 .controls button {
   margin-right: 5px;
+}
+
+.form-group {
+  padding: 5px 0;
+}
+
+.form-group>div {
+  margin: 2px;
+}
+
+/* Color picker */
+
+.form-color-picker {
+  position: relative;
+}
+
+.color-picker {
+  position: absolute;
+  top: 100%;
 }

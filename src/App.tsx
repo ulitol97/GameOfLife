@@ -1,5 +1,6 @@
 import produce from 'immer';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { GithubPicker } from 'react-color';
 
 
 // Config
@@ -7,6 +8,12 @@ const numRows = 30;
 const numCols = 50;
 const stepTimeout = 250;
 const randomizeProbability = 0.5;
+const defaultColor = {
+  r: 18,
+  g: 115,
+  b: 222,
+  a: 1
+}
 
 // Function to create the template grid data structure
 const createEmptyGrid = () => {
@@ -50,7 +57,10 @@ const App: React.FC = () => {
   // State
   const [grid, setGrid] = useState(() => { return createEmptyGrid() });
   const [gameState, setGameState] = useState(GameState.Stopped);
-  let [step, setStep] = useState(0);
+  const [step, setStep] = useState(0);
+  const [advancedControls, setAdvancedControls] = useState(false);
+  const [colorPicker, setColorPicker] = useState(false);
+  const [cellColor, setCellColor] = useState(`rgba(${defaultColor.r}, ${defaultColor.g}, ${defaultColor.b}, ${defaultColor.a})`);
 
   // Refs
   const gameStateRef = useRef(gameState);
@@ -116,33 +126,72 @@ const App: React.FC = () => {
   return (
     <div id="main">
       <div className="controls">
-        <button
-          onClick={() => {
-            if (gameState === GameState.Stopped) setGameState(GameState.Running)
-            else setGameState(GameState.Stopped)
-          }}
-        >
-          {gameState === GameState.Stopped ? 'Start' : 'Stop'}
-        </button>
-        <button disabled={gameState === GameState.Stopped}
-          onClick={() => {
-            if (gameState !== GameState.Paused) setGameState(GameState.Paused);
-            else setGameState(GameState.Running);
-          }}
-        >
-          {gameState === GameState.Paused ? 'Resume' : 'Pause'}
-      </button>
-        <button disabled={gameState !== GameState.Stopped}
-          onClick={() => setGrid(createRandomGrid())}>
-          Randomize
-      </button>
-        <button disabled={gameState === GameState.Running}
-          onClick={() => setGrid(createEmptyGrid())}
-        >
-          Clear
-      </button>
+        <div className="form-group">
+          <div>
+            <button
+              onClick={() => {
+                if (gameState === GameState.Stopped) setGameState(GameState.Running)
+                else setGameState(GameState.Stopped)
+              }}
+            >
+              {gameState === GameState.Stopped ? 'Start' : 'Stop'}
+            </button>
+            <button disabled={gameState === GameState.Stopped}
+              onClick={() => {
+                if (gameState !== GameState.Paused) setGameState(GameState.Paused);
+                else setGameState(GameState.Running);
+              }}
+            >
+              {gameState === GameState.Paused ? 'Resume' : 'Pause'}
+            </button>
+          </div>
+          <div>
+            <button disabled={gameState !== GameState.Stopped}
+              onClick={() => setGrid(createRandomGrid())}>
+              Randomize
+            </button>
+            <button disabled={gameState === GameState.Running}
+              onClick={() => setGrid(createEmptyGrid())}
+            >
+              Clear
+            </button>
+          </div>
+          <label>
+            <input type="checkbox" name="advanced-controls" checked={advancedControls}
+              onChange={() => setAdvancedControls(!advancedControls)}
+            />
+            Show advanced controls
+          </label>
+        </div>
 
-        <pre>Current step: {step}</pre>
+        {/* Advanced controls */}
+        {
+          advancedControls && <div className="form-group">
+            <div>
+              <div className="form-color-picker">
+                <button
+                  onClick={() => setColorPicker(!colorPicker)}
+                >
+                  Change cell color
+                  {
+                    colorPicker &&
+                    <div className="color-picker">
+                      <GithubPicker onChangeComplete={({ rgb }) => setCellColor(
+                        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`
+                      )} />
+                    </div>
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+
+
+      </div>
+      <div className="data">
+        <p>Current step: {step}</p>
+
       </div>
       <div
         style={{
@@ -163,13 +212,13 @@ const App: React.FC = () => {
               }}
               style={{
                 width: 20, height: 20,
-                backgroundColor: grid[i][j] === 1 ? 'lightskyblue' : 'white',
+                backgroundColor: grid[i][j] === 1 ? cellColor : 'white',
                 border: 'solid 1px black'
               }}>
 
             </div>))}
       </div>
-    </div>
+    </div >
   )
 }
 
