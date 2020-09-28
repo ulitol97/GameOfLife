@@ -93,7 +93,7 @@ const App: React.FC = () => {
   }, [gameState])
 
 
-  // UseCallback to create the function only one
+  // UseCallback to create the function only once
   const runSimulation = useCallback(() => {
 
     const gameState = gameStateRef.current;
