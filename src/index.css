@@ -43,6 +43,10 @@ code {
   margin: 2px;
 }
 
+input[type="number"] {
+  margin-left: 5px;
+}
+
 /* Color picker */
 
 .form-color-picker {

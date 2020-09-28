@@ -1,13 +1,14 @@
 import produce from 'immer';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { GithubPicker } from 'react-color';
+import ReactTooltip from "react-tooltip";
 
 
 // Config
 const numRows = 30;
 const numCols = 50;
 const stepTimeout = 250;
-const randomizeProbability = 0.5;
+const defaultRandomizeProbability = 0.5;
 const defaultColor = {
   r: 18,
   g: 115,
@@ -15,21 +16,27 @@ const defaultColor = {
   a: 1
 }
 
+const minimumStep = 100;
+const maximumStep = 20000;
+
+const minimumProbability = 0;
+const maximumProbability = 1;
+
 // Function to create the template grid data structure
-const createEmptyGrid = () => {
+const createGrid = (aliveProbability?: number) => {
   const rows = [];
-  for (let i = 0; i < numRows; i++) {
-    rows.push(Array.from(Array(numCols), () => 0));
+
+  if (aliveProbability) {
+    for (let i = 0; i < numRows; i++) {
+      rows.push(Array.from(Array(numCols), () => Math.random() >= (1 - aliveProbability) ? 1 : 0));
+    }
+  }
+  else {
+    for (let i = 0; i < numRows; i++) {
+      rows.push(Array.from(Array(numCols), () => 0));
+    }
   }
 
-  return rows;
-};
-
-const createRandomGrid = () => {
-  const rows = [];
-  for (let i = 0; i < numRows; i++) {
-    rows.push(Array.from(Array(numCols), () => Math.random() >= randomizeProbability ? 1 : 0));
-  }
 
   return rows;
 };
@@ -55,12 +62,15 @@ enum GameState {
 const App: React.FC = () => {
 
   // State
-  const [grid, setGrid] = useState(() => { return createEmptyGrid() });
+  const [grid, setGrid] = useState(() => { return createGrid() });
   const [gameState, setGameState] = useState(GameState.Stopped);
   const [step, setStep] = useState(0);
+  const [stepInterval, setStepInterval] = useState(stepTimeout);
+  const [randomizeProbability, setRandomizeProbability] = useState(defaultRandomizeProbability);
   const [advancedControls, setAdvancedControls] = useState(false);
   const [colorPicker, setColorPicker] = useState(false);
   const [cellColor, setCellColor] = useState(`rgba(${defaultColor.r}, ${defaultColor.g}, ${defaultColor.b}, ${defaultColor.a})`);
+
 
   // Refs
   const gameStateRef = useRef(gameState);
@@ -68,6 +78,9 @@ const App: React.FC = () => {
 
   const stepRef = useRef(step);
   stepRef.current = step;
+
+  const stepIntervalRef = useRef(stepInterval);
+  stepIntervalRef.current = stepInterval;
 
   // Trigger corresponding actions when simulation is started/stopped
   useEffect(() => {
@@ -113,12 +126,12 @@ const App: React.FC = () => {
 
     // Invoke next step
     setStep(stepRef.current += 1);
-    setTimeout(runSimulation, stepTimeout);
+    setTimeout(runSimulation, stepIntervalRef.current);
   }, [])
 
   const stopSimulation = useCallback(() => {
 
-    setGrid(createEmptyGrid());
+    setGrid(createGrid());
     setStep(0);
 
   }, []);
@@ -147,11 +160,11 @@ const App: React.FC = () => {
           </div>
           <div>
             <button disabled={gameState !== GameState.Stopped}
-              onClick={() => setGrid(createRandomGrid())}>
+              onClick={() => setGrid(createGrid(randomizeProbability))}>
               Randomize
             </button>
             <button disabled={gameState === GameState.Running}
-              onClick={() => setGrid(createEmptyGrid())}
+              onClick={() => setGrid(createGrid())}
             >
               Clear
             </button>
@@ -183,7 +196,49 @@ const App: React.FC = () => {
                   }
                 </button>
               </div>
+              <div>
+                <label>
+                  Step interval (ms):
+                  <input
+                    type="number"
+                    min={minimumStep}
+                    max={maximumStep}
+                    step={50}
+                    value={stepInterval}
+                    onChange={e => {
+                      const step = parseInt(e.target.value);
+
+                      if (step > maximumStep) setStepInterval(maximumStep)
+                      else if (step < minimumStep) setStepInterval(minimumStep)
+                      else setStepInterval(step)
+                    }}
+                  />
+                </label>
+              </div>
+              <div>
+                <label data-tip data-for="probabilityTip">
+                  Alive probability:
+                  <input
+                    type="number"
+                    min={minimumProbability}
+                    max={maximumProbability}
+                    step={0.1}
+                    value={randomizeProbability}
+                    onChange={e => {
+                      const prob = parseFloat(e.target.value);
+
+                      if (prob > maximumProbability) setRandomizeProbability(maximumProbability);
+                      else if (prob < minimumProbability) setRandomizeProbability(minimumProbability);
+                      else setRandomizeProbability(prob);
+                    }}
+                  />
+                </label>
+                <ReactTooltip id="probabilityTip" place="bottom" effect="solid">
+                  Choose the probability of generating alive cells when randomizing the grid. Values range [0, 1]
+                </ReactTooltip>
+              </div>
             </div>
+
           </div>
         }
 
