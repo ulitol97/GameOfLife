@@ -4,9 +4,11 @@ import { GithubPicker } from 'react-color';
 import ReactTooltip from "react-tooltip";
 
 
-// Config
-const numRows = 30;
-const numCols = 50;
+// CONFIG
+const cellSizePx = 20;
+// Number of rows and cols determined by initial client windows size
+const numRows = Math.floor(window.innerHeight * 0.7 / cellSizePx - 1);
+const numCols = Math.floor(window.innerWidth * 0.9 / cellSizePx);
 const stepTimeout = 250;
 const defaultRandomizeProbability = 0.5;
 const defaultColor = {
@@ -138,120 +140,122 @@ const App: React.FC = () => {
 
   return (
     <div id="main">
-      <div className="controls">
-        <div className="form-group">
-          <div>
-            <button
-              onClick={() => {
-                if (gameState === GameState.Stopped) setGameState(GameState.Running)
-                else setGameState(GameState.Stopped)
-              }}
-            >
-              {gameState === GameState.Stopped ? 'Start' : 'Stop'}
+      <div className="upper">
+        <div className="controls">
+          <div className="form-group">
+            <div>
+              <button
+                onClick={() => {
+                  if (gameState === GameState.Stopped) setGameState(GameState.Running)
+                  else setGameState(GameState.Stopped)
+                }}
+              >
+                {gameState === GameState.Stopped ? 'Start' : 'Stop'}
+              </button>
+              <button disabled={gameState === GameState.Stopped}
+                onClick={() => {
+                  if (gameState !== GameState.Paused) setGameState(GameState.Paused);
+                  else setGameState(GameState.Running);
+                }}
+              >
+                {gameState === GameState.Paused ? 'Resume' : 'Pause'}
+              </button>
+            </div>
+            <div>
+              <button disabled={gameState !== GameState.Stopped}
+                onClick={() => setGrid(createGrid(randomizeProbability))}>
+                Randomize
             </button>
-            <button disabled={gameState === GameState.Stopped}
-              onClick={() => {
-                if (gameState !== GameState.Paused) setGameState(GameState.Paused);
-                else setGameState(GameState.Running);
-              }}
-            >
-              {gameState === GameState.Paused ? 'Resume' : 'Pause'}
+              <button disabled={gameState === GameState.Running}
+                onClick={() => setGrid(createGrid())}
+              >
+                Clear
             </button>
-          </div>
-          <div>
-            <button disabled={gameState !== GameState.Stopped}
-              onClick={() => setGrid(createGrid(randomizeProbability))}>
-              Randomize
-            </button>
-            <button disabled={gameState === GameState.Running}
-              onClick={() => setGrid(createGrid())}
-            >
-              Clear
-            </button>
-          </div>
-          <label>
-            <input type="checkbox" name="advanced-controls" checked={advancedControls}
-              onChange={() => setAdvancedControls(!advancedControls)}
-            />
+            </div>
+            <label>
+              <input type="checkbox" name="advanced-controls" checked={advancedControls}
+                onChange={() => setAdvancedControls(!advancedControls)}
+              />
             Show advanced controls
           </label>
-        </div>
-
-        {/* Advanced controls */}
-        {
-          advancedControls && <div className="form-group">
-            <div>
-              <div className="form-color-picker">
-                <button
-                  onClick={() => setColorPicker(!colorPicker)}
-                >
-                  Change cell color
-                  {
-                    colorPicker &&
-                    <div className="color-picker">
-                      <GithubPicker onChangeComplete={({ rgb }) => setCellColor(
-                        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`
-                      )} />
-                    </div>
-                  }
-                </button>
-              </div>
-              <div>
-                <label>
-                  Step interval (ms):
-                  <input
-                    type="number"
-                    min={minimumStep}
-                    max={maximumStep}
-                    step={50}
-                    value={stepInterval}
-                    onChange={e => {
-                      const step = parseInt(e.target.value);
-
-                      if (step > maximumStep) setStepInterval(maximumStep)
-                      else if (step < minimumStep) setStepInterval(minimumStep)
-                      else setStepInterval(step)
-                    }}
-                  />
-                </label>
-              </div>
-              <div>
-                <label data-tip data-for="probabilityTip">
-                  Alive probability:
-                  <input
-                    type="number"
-                    min={minimumProbability}
-                    max={maximumProbability}
-                    step={0.1}
-                    value={randomizeProbability}
-                    onChange={e => {
-                      const prob = parseFloat(e.target.value);
-
-                      if (prob > maximumProbability) setRandomizeProbability(maximumProbability);
-                      else if (prob < minimumProbability) setRandomizeProbability(minimumProbability);
-                      else setRandomizeProbability(prob);
-                    }}
-                  />
-                </label>
-                <ReactTooltip id="probabilityTip" place="bottom" effect="solid">
-                  Choose the probability of generating alive cells when randomizing the grid. Values range [0, 1]
-                </ReactTooltip>
-              </div>
-            </div>
-
           </div>
-        }
+
+          {/* Advanced controls */}
+          {
+            advancedControls && <div className="form-group">
+              <div>
+                <div className="form-color-picker">
+                  <button
+                    onClick={() => setColorPicker(!colorPicker)}
+                  >
+                    Change cell color
+                  {
+                      colorPicker &&
+                      <div className="color-picker">
+                        <GithubPicker onChangeComplete={({ rgb }) => setCellColor(
+                          `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`
+                        )} />
+                      </div>
+                    }
+                  </button>
+                </div>
+                <div>
+                  <label>
+                    Step interval (ms):
+                  <input
+                      type="number"
+                      min={minimumStep}
+                      max={maximumStep}
+                      step={50}
+                      value={stepInterval}
+                      onChange={e => {
+                        const step = parseInt(e.target.value);
+
+                        if (step > maximumStep) setStepInterval(maximumStep)
+                        else if (step < minimumStep) setStepInterval(minimumStep)
+                        else setStepInterval(step)
+                      }}
+                    />
+                  </label>
+                </div>
+                <div>
+                  <label data-tip data-for="probabilityTip">
+                    Alive probability:
+                  <input
+                      type="number"
+                      min={minimumProbability}
+                      max={maximumProbability}
+                      step={0.1}
+                      value={randomizeProbability}
+                      onChange={e => {
+                        const prob = parseFloat(e.target.value);
+
+                        if (prob > maximumProbability) setRandomizeProbability(maximumProbability);
+                        else if (prob < minimumProbability) setRandomizeProbability(minimumProbability);
+                        else setRandomizeProbability(prob);
+                      }}
+                    />
+                  </label>
+                  <ReactTooltip id="probabilityTip" place="bottom" effect="solid">
+                    Probability of generating alive cells when randomizing the grid
+                </ReactTooltip>
+                </div>
+              </div>
+
+            </div>
+          }
 
 
+        </div>
+        <div className="data">
+          <p>Current step: {step}</p>
+
+        </div>
       </div>
-      <div className="data">
-        <p>Current step: {step}</p>
-
-      </div>
-      <div
+      <div id="grid"
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${numCols}, 20px)`
+          gridTemplateColumns: `repeat(${numCols}, ${cellSizePx}px)`
         }}>
         {grid.map((row, i) =>
           row.map((col, j) =>
