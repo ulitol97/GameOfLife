@@ -7,13 +7,13 @@
 
 ### What is this?
 
-This is a simple recreation of Conway's game of Life using React and functional components + hooks.
+This is a simple recreation of Conway's "Game of Life" using React functional components + hooks.
 
 **It is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input.**
 
 ### Game rules
 
-In this implementation we'll have a limited-size grid, each square cell being in one of two states: alive (colored) or dead (empty).
+In this implementation we'll have a limited-size grid, each cell being in one of two states: alive (colored) or dead (empty).
 
 Each cell interacts with its eight neighbours such that at each step in time, the following transitions take place:
 
