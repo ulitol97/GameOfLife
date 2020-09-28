@@ -118,25 +118,30 @@ const App: React.FC = () => {
       <div className="controls">
         <button
           onClick={() => {
-            if (gameState === GameState.Running)
-              setGameState(GameState.Stopped);
-            else setGameState(GameState.Running)
+            if (gameState === GameState.Stopped) setGameState(GameState.Running)
+            else setGameState(GameState.Stopped)
           }}
         >
-          {gameState === GameState.Stopped ? 'Start' :
-            gameState === GameState.Paused ? 'Resume' : 'Stop'}
+          {gameState === GameState.Stopped ? 'Start' : 'Stop'}
         </button>
-        <button disabled={gameState === GameState.Paused || gameState === GameState.Stopped}
+        <button disabled={gameState === GameState.Stopped}
           onClick={() => {
-            setGameState(GameState.Paused);
+            if (gameState !== GameState.Paused) setGameState(GameState.Paused);
+            else setGameState(GameState.Running);
           }}
         >
-          Pause
+          {gameState === GameState.Paused ? 'Resume' : 'Pause'}
       </button>
         <button disabled={gameState !== GameState.Stopped}
           onClick={() => setGrid(createRandomGrid())}>
           Randomize
       </button>
+        <button disabled={gameState === GameState.Running}
+          onClick={() => setGrid(createEmptyGrid())}
+        >
+          Clear
+      </button>
+
         <pre>Current step: {step}</pre>
       </div>
       <div
@@ -149,6 +154,8 @@ const App: React.FC = () => {
             <div
               key={`${i}-${j}`} // Unique key based on cell position
               onClick={() => { // Toggle cell on click
+                if (gameState === GameState.Running) return;
+
                 const newGrid = produce(grid, draftGrid => {
                   draftGrid[i][j] = grid[i][j] ? 0 : 1;
                 });
