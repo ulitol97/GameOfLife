@@ -7,8 +7,8 @@ import ReactTooltip from "react-tooltip";
 // CONFIG
 const cellSizePx = 20;
 // Number of rows and cols determined by initial client windows size
-const numRows = Math.floor(window.innerHeight * 0.7 / cellSizePx - 1);
-const numCols = Math.floor(window.innerWidth * 0.9 / cellSizePx);
+const numRows = Math.min(Math.floor(window.innerHeight * 0.7 / cellSizePx - 1), 500);
+const numCols = Math.min(Math.floor(window.innerWidth * 0.9 / cellSizePx), 500);
 const stepTimeout = 250;
 const defaultRandomizeProbability = 0.5;
 const defaultColor = {
