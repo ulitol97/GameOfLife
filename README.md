@@ -4,6 +4,8 @@
 
 **Demo: https://ulitol97.github.io/Game-of-Life/**
 
+![GameOfLifeDemo](https://user-images.githubusercontent.com/35763574/94534000-324cf980-0240-11eb-9a0a-53245e2b1585.gif)
+
 
 ### What is this?
 
