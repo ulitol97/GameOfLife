@@ -29,7 +29,7 @@ Each cell interacts with its eight neighbours such that at each step in time, th
 
 The player can interact with the automaton at any time before starting the simulation or during the simulation by:
 1) Pausing the game
-2) Clicking on any cell. Dead cells will come to life and life cells will die ([common cell patterns](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns)).
+2) Clicking on any cell. Dead cells will come to life and alive cells will die ([common cell patterns](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns)).
 
 The initial grid can be randomized as well.
 
