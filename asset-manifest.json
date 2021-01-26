@@ -1,22 +1,20 @@
 {
   "files": {
-    "main.css": "/Game-of-Life/static/css/main.87562f82.chunk.css",
-    "main.js": "/Game-of-Life/static/js/main.f34b3f84.chunk.js",
-    "main.js.map": "/Game-of-Life/static/js/main.f34b3f84.chunk.js.map",
-    "runtime-main.js": "/Game-of-Life/static/js/runtime-main.f46c60ba.js",
-    "runtime-main.js.map": "/Game-of-Life/static/js/runtime-main.f46c60ba.js.map",
-    "static/js/2.c1b6d5ae.chunk.js": "/Game-of-Life/static/js/2.c1b6d5ae.chunk.js",
-    "static/js/2.c1b6d5ae.chunk.js.map": "/Game-of-Life/static/js/2.c1b6d5ae.chunk.js.map",
+    "main.css": "/Game-of-Life/static/css/main.be18d694.chunk.css",
+    "main.js": "/Game-of-Life/static/js/main.a9482194.chunk.js",
+    "main.js.map": "/Game-of-Life/static/js/main.a9482194.chunk.js.map",
+    "runtime-main.js": "/Game-of-Life/static/js/runtime-main.e7dc691a.js",
+    "runtime-main.js.map": "/Game-of-Life/static/js/runtime-main.e7dc691a.js.map",
+    "static/js/2.99fa4c5a.chunk.js": "/Game-of-Life/static/js/2.99fa4c5a.chunk.js",
+    "static/js/2.99fa4c5a.chunk.js.map": "/Game-of-Life/static/js/2.99fa4c5a.chunk.js.map",
     "index.html": "/Game-of-Life/index.html",
-    "precache-manifest.5bdd56163749e5f60ac8f5a21da04f41.js": "/Game-of-Life/precache-manifest.5bdd56163749e5f60ac8f5a21da04f41.js",
-    "service-worker.js": "/Game-of-Life/service-worker.js",
-    "static/css/main.87562f82.chunk.css.map": "/Game-of-Life/static/css/main.87562f82.chunk.css.map",
-    "static/js/2.c1b6d5ae.chunk.js.LICENSE.txt": "/Game-of-Life/static/js/2.c1b6d5ae.chunk.js.LICENSE.txt"
+    "static/css/main.be18d694.chunk.css.map": "/Game-of-Life/static/css/main.be18d694.chunk.css.map",
+    "static/js/2.99fa4c5a.chunk.js.LICENSE.txt": "/Game-of-Life/static/js/2.99fa4c5a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.f46c60ba.js",
-    "static/js/2.c1b6d5ae.chunk.js",
-    "static/css/main.87562f82.chunk.css",
-    "static/js/main.f34b3f84.chunk.js"
+    "static/js/runtime-main.e7dc691a.js",
+    "static/js/2.99fa4c5a.chunk.js",
+    "static/css/main.be18d694.chunk.css",
+    "static/js/main.a9482194.chunk.js"
   ]
 }
